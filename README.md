@@ -33,5 +33,6 @@
 - ***telefon***: broj telefona hotela
 - ***email***: email hotela
 <br/>
+
 ### Komentar
 - za otvaranje .csv filea koristite VSC, a ne EXCEL jer ne prikazuje dobro hrvatske znakove iako je pri kreiranju filea postavljen encoding utf-8
