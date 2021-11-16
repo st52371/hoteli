@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../styles/datatable.css">
+    <title>Document</title>
+</head>
+<body>
+    <section class="frame">
+        <form action="/" method="post">
+            <div class="form-group">
+              <label for="searchterm">Vrijednost koju tražite</label>
+              <input type="text" class="form-control" id="searchterm" name="searchterm" aria-describedby="searchterm" placeholder="Unesite vrijednost">
+            </div>
+            <div>
+                <label for="searchattr">Polje po kojem želite pretraživati</label>
+                <select class="form-control" name="searchattr">
+                    <option value="">Odaberite polje za pretragu</option>
+                    <% for (attr of attributes2) { %>
+                        <option value="<%=attr.sql%>"><%= attr.display %></option>
+                    <% } %>
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Pretraži</button>
+                <a href="../files/hoteli.json" download="hoteli" class="btn btn-primary"><span>Skini podatke u JSON formatu</span></a>
+                <a href="../files/hoteli.csv" download="hoteli" class="btn btn-primary"><span>Skini podatke u CSV formatu</span></a>
+            </div>
+        </form>
+        <div class="table-div table-div-shown">
+            <table class="table table-shown">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <% for (attr of attributes2) {%>
+                    <th scope="col"><%= attr.display %></th>
+                    <% }  %> 
+                  </tr>
+                </thead>
+                <tbody>
+                    <% var i = 0 %>
+                    <% for (row of rows) {%> 
+                        <tr>
+                        <th scope="row"><%= ++i %></th>
+                        <% for (attr of attributes) {%>
+                        <td><%= row[attr] %></td>
+                        <% } %>
+                        </tr>
+                    <% } %> 
+                  </tbody>
+              </table>
+        </div>
+    </section>
+</body>
+</html>
