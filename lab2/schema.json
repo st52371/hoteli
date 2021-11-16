@@ -1,0 +1,114 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://github.com/st52371/hoteli/hoteli.json",
+    "type": "array",
+    "title": "Hoteli skup podataka",
+    "description": "otvoreni skup podataka hotela",
+    "items": {
+        "type": "object",
+        "title": "Hotel",
+        "description": "Objekt koji sadrži sve podatke o jednom hotelu",
+        "required": ["naziv", "adresa", "grad","zupanija","drzava","brojzvjezdica","ratings","weburl","telefon", "email"],
+        "properties": {
+            "naziv": {
+                "$id": "#/items/anyOf/0/properties/naziv",
+                "type": "string",
+                "title": "Naziv hotela",
+                "description": "Naziv hotela"
+            },
+            "adresa": {
+                "$id": "#/items/anyOf/0/properties/adresa",
+                "type": "string",
+                "title": "Adresa hotela",
+                "description": "Adresa hotela"
+            },
+            "grad": {
+                "$id": "#/items/anyOf/0/properties/grad",
+                "type": "string",
+                "title": "Naziv grada",
+                "description": "Naziv grada u kojem se hotel nalazi"
+            },
+            "zupanija": {
+                "$id": "#/items/anyOf/0/properties/zupanija",
+                "type": "string",
+                "title": "Naziv zupanije",
+                "description": "Naziv zupanije u kojoj se hotel nalazi"
+            },
+            "drzava": {
+                "$id": "#/items/anyOf/0/properties/drzava",
+                "type": "string",
+                "title": "Naziv hotela",
+                "description": "Naziv drzave u kojoj se hotel nalazi"
+            },
+            "brojzvjezdica": {
+                "$id": "#/items/anyOf/0/properties/brojzvjezdica",
+                "type": "string",
+                "title": "Broj zvjezdica",
+                "description": "Broj zvjezdica hotela"
+            },
+            "ratings": {
+                "$id": "#/items/anyOf/0/properties/ratings",
+                "type": "number",
+                "title": "Ratings hotela",
+                "description": "Popis ratingsa hotela",
+                "additionalItems": true,
+                "items": {
+                    "$id": "#/items/anyOf/0/properties/ratings/items",
+                    "anyOf": [
+                        {
+                            "$id": "#/items/anyOf/0/properties/ratings/items/anyOf/0",
+                            "type": "object",
+                            "title": "Ratingsi hotela",
+                            "description": "Popis ratingsa hotela",
+                            "required": [
+                                "googlerating",
+                                "bookingrating",
+                                "trivagorating"
+                            ],
+                            "properties": {
+                                "googlerating": {
+                                    "$id": "#/items/anyOf/0/properties/ratings/items/anyOf/0/properties/googlerating",
+                                    "type": "number",
+                                    "title": "Google rating",
+                                    "description": "Google rating"
+                                },
+                                "bookingrating": {
+                                    "$id": "#/items/anyOf/0/properties/ratings/items/anyOf/0/properties/bookingrating",
+                                    "type": "number",
+                                    "title": "Booking.com rating",
+                                    "description": "Rating hotela na stranici booking.com"
+                                },
+                                "trivagorating": {
+                                    "$id": "#/items/anyOf/0/properties/ratings/items/anyOf/0/properties/trivagorating",
+                                    "type": "number",
+                                    "title": "Trivago rating",
+                                    "description": "Rating hotela na stranici trivago.hr"
+                                }
+                            }
+                        }
+                    ]
+                }
+
+            },
+            "weburl": {
+                "$id": "#/items/anyOf/0/properties/weburl",
+                "type": "string",
+                "title": "Weburl hotela",
+                "description": "URL web stranice hotela"
+            },
+            "telefon": {
+                "$id": "#/items/anyOf/0/properties/telefon",
+                "type": "string",
+                "title": "Telefon hotela",
+                "description": "Telefon hotela"
+            },
+            "email": {
+                "$id": "#/items/anyOf/0/properties/email",
+                "type": "string",
+                "title": "Email hotela",
+                "description": "Email hotela"
+            }
+        }
+    }
+
+}
