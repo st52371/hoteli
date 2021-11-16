@@ -1,0 +1,153 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+
+:root {
+    --font-clr-primary-1: #404040;
+    --border-clr-primary-1: #e6e6e6;
+    --grey-bg-clr-primary-1: #f2f2f2;
+    --white-bg-clr-primary-2: #ffffff;
+    --font-primary: 'Roboto', sans-serif;
+    --font-secondary: 'Montserrat', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: var(--grey-bg-clr-primary-1);
+    color: var(--font-clr-primary-1);
+    font-family: var(--font-primary);
+    letter-spacing: 2px;
+}
+.frame {
+    margin: 4rem 5rem;
+    padding: 1rem 2rem;
+    border: 2px solid var(--border-clr-primary-1);
+    border-radius: 17px;
+    background-color: var(--white-bg-clr-primary-2);
+    box-shadow: 0 0 15px 3px #d9d9d9;
+}
+
+div {
+    padding-left: 3rem;
+    padding-right: 3rem;
+}
+
+@keyframes crta {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 80%;
+    }
+}
+@keyframes naslov {
+    from {
+        letter-spacing: 1px;
+    }
+    tp {
+        letter-spacing: 5px;
+    }
+}
+
+hr {
+    width: 80%;
+    animation: 1.3s ease-out 0s 1 crta;
+}
+
+h4 {
+    letter-spacing: 5px;
+    font-size: 2rem;
+    text-transform: uppercase;
+    text-align: center;
+    /* transition: all 0.5s ease-out; */
+    animation:  1.3s ease-out naslov;
+}
+/* h4:hover {
+    letter-spacing: 7px;
+} */
+h3 {
+    font-size: 1.5rem;
+    
+}
+
+span {
+    font-size: 1.2rem;
+    font-family: var(--font-secondary);
+}
+
+p span {
+    font-weight: 900;
+    font-style: italic;
+}
+
+p {
+    font-size: 1.2rem;
+    font-family: var(--font-secondary);
+}
+
+i {
+    padding-left: 15px;
+    font-size: 1rem;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+    border: 1.7px solid var(--white-bg-clr-primary-2);
+    padding: 10px;
+    padding-top: 14px;
+}
+
+.formats a {
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear; 
+}
+
+a:hover {
+    color: black;
+    border: 1.7px solid var(--font-clr-primary-1);
+    border-radius: 15px;
+}
+
+
+@media only screen and (max-width: 870px) {
+    .frame {
+        margin: 2rem 1.5rem;
+        padding: 0.5rem 0.2rem;
+    }
+    div {
+        padding-left: 1.3rem;
+        padding-right: 1.3rem;
+    }
+    h4 {
+        font-size: 1rem;
+    }
+    h3 {
+        font-size: 0.9rem;
+    }
+    span {
+        font-size: 0.8rem;
+    }
+    p {
+        font-size: 0.8rem;
+        font-family: var(--font-secondary);
+    }
+    i {
+        padding-left: 15px;
+        font-size: 0.5rem;
+    }
+    a {
+        padding: 7px;
+        padding-top: 7px;
+        border: 1px solid var(--white-bg-clr-primary-2);
+    }
+    a:hover {
+        border: 1px solid var(--font-clr-primary-1);
+    }
+}
+
