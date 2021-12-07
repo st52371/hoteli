@@ -44,6 +44,9 @@ input {
     border-radius: 12px;
     font-size: 1.2rem;
 }
+.povratak  {
+    padding: 10px 0 20px 0;
+}
 /* ZAS NE RADIIIIIIS */
 input:focus {
     outline: none !important;
@@ -72,6 +75,7 @@ input:focus {
 
 .table {
     visibility: collapse;
+    font-size: 12px;
 }
 
 /* treba dodat ova dva */
@@ -118,59 +122,7 @@ label {
     font-size: 1.2rem;
     padding: 4px 0;
 }
-/* h3 {
-    font-size: 20rem;
-    
-} */
 
-/* span {
-    display: block;
-    font-size: 1.2rem;
-    font-family: var(--font-secondary);
-} */
-
-/* input {
-    margin: 1rem 1rem;
-    border-radius: 5px;
-    border: 1px solid var(--font-clr-primary-1);
-} */
-
-/* p span {
-    font-weight: 900;
-    font-style: italic;
-} */
-
-/* p {
-    font-size: 1.2rem;
-    font-family: var(--font-secondary);
-} */
-/* 
-i {
-    padding-left: 15px;
-    font-size: 1rem;
-} */
-
-/* a {
-    color: black;
-    text-decoration: none;
-    border: 1.7px solid var(--white-bg-clr-primary-2);
-    padding: 10px;
-    padding-top: 14px;
-} */
-
-/* fix this*/
-/* .formats a {
-    -webkit-transition: all 0.2s linear;
-    -moz-transition: all 0.2s linear;
-    -o-transition: all 0.2s linear;
-    transition: all 0.2s linear; 
-} */
-
-/* a:hover {
-    color: black;
-    border: 1.7px solid var(--font-clr-primary-1);
-    border-radius: 15px;
-} */
 
 
 @media only screen and (max-width: 870px) {
