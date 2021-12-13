@@ -1,26 +1,34 @@
 
 const express = require('express');
-const { json } = require('express/lib/response');
 const app = express();
-const {Pool} = require('pg');
-const http = require('http');
+// const {Pool} = require('pg');
+// const http = require('http');
 const fs = require("fs");
-
-const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'hoteli',
-    password: '16028400',
-    port: 5432  // zasto 5432
-});
+// const axios = require("axios");
+const api = require("./routes/api.route");
 var format = require('pg-format');
-const { database } = require('pg/lib/defaults');
+const pool = require('./db/pgadmin');
+
+
+app.use("/getdata", api);
+
 
 app.set('view engine', 'ejs');
 // to serve static files
 app.use(express.static(__dirname));
 // da mozemo accessat stvari iz bodya
 app.use(express.urlencoded({extended: true}));
+
+
+// var count = 0;
+var count = fs.readFile("hoteli.json", "utf-8", (err, data) => {
+    if (err) throw err;
+    count = JSON.parse(data).length;
+    console.log(count);
+    return count;
+});
+
+
 
 const downloadSelect = `SELECT hotel.naziv, ulice.nazivulice || ' ' || adrese.broj::TEXT ||
         CASE WHEN adrese.dodatnaoznaka IS NULL THEN '' ELSE adrese.dodatnaoznaka END AS adresa,
@@ -29,8 +37,7 @@ const downloadSelect = `SELECT hotel.naziv, ulice.nazivulice || ' ' || adrese.br
             'bookingrating', ratings.bookingrating, 'tivagorating', ratings.trivagorating) AS ratings,
         hotel.weburl,kontakt.brojtelefona AS telefon, kontakt.email AS email
         FROM hotel LEFT JOIN adrese ON hotel.adresaid = adrese.adresaid
-        NATURAL JOIN ulice NATURAL JOIN gradovi
-        NATURAL JOIN zupanije NATURAL JOIN drzave
+        NATURAL JOIN ulice NATURAL JOIN gradovi NATURAL JOIN zupanije NATURAL JOIN drzave
         LEFT JOIN ratings ON hotel.ratingid = ratings.ratingid
         LEFT JOIN kontakt ON hotel.kontaktid = kontakt.kontaktid`;
 
@@ -45,10 +52,10 @@ const displaySelect = `SELECT hotel.naziv, ulice.nazivulice || ' ' || adrese.bro
         LEFT JOIN kontakt ON hotel.kontaktid = kontakt.kontaktid`;
 
 // putanje za saveanje filtriranih fileova
-const jsonPath = 'D:/fax/or/labosi/lab2/files/hoteli.json';
-const csvPath = 'D:/fax/or/labosi/lab2/files/hoteli.csv';
+const jsonPath = 'D:/fax/or/labosi/gitty/hoteli/lab2/files/hoteli.json';
+const csvPath = 'D:/fax/or/labosi/gitty/hoteli/lab2/files/hoteli.csv';
 
-
+// za prikaz podataka
 const attributes = ['naziv', 'adresa', 'grad', 'zupanija', 'drzava', 'brojzvjezdica', 'googlerating',
                     'bookingrating', 'trivagorating', 'weburl', 'telefon', 'email'];
 const attributes2 = [{display: 'Naziv', sql: 'hotel.naziv'},
@@ -66,9 +73,18 @@ const attributes2 = [{display: 'Naziv', sql: 'hotel.naziv'},
                     ];
 
 
-// prikaz svih podataka
+// prikaz svih podataka pri ucitavanju stranice
 app.get('/', async (req, res) => {
+    // promjena original fileova u slucaju updateanja baze
+    var json = format(`COPY (select json_agg(row_to_json(hoteli))
+                FROM (%s) hoteli) to 'D:/fax/or/labosi/lab2/hoteli.json'`, downloadSelect);
+    var csv = format(`COPY (%s) TO 'D:/fax/or/labosi/gitty/hoteli/lab2/hoteli.csv'
+                DELIMITER ',' ENCODING 'utf-8' CSV HEADER`, downloadSelect);
+    await pool.query(json);
+    await pool.query(csv);
     const results = await pool.query(displaySelect);
+    // promjena original fileova u slucaju updateanja baze
+
     res.render('datatable', {
         text: 'world',
         rows: results.rows,
@@ -77,36 +93,7 @@ app.get('/', async (req, res) => {
     });
 });
 
-app.get('/jsonpodaci', async (req, res) => {
-    // fs.writeFile('test.json', JSON.stringify("./files/hoteli.json", null, 4), (err) => {
-    //     if (err) throw err;
-    // });
-    fs.readFile("./files/hoteli.json", "utf-8", function (err, data) {
-        if (err) throw err;
-        // data = data.toString();
-        res.end(data); 
 
-        // var display = JSON.parse(data);
-        // console.log(display);
-        // res.send(display);
-
-    });
-
-    // let raw = fs.readFileSync("./files/hoteli.json", "utf-8");
-    // let dis = JSON.parse(raw);
-    // res.end(dis);
-
-    // var http = require('http');
-    // http.createServer(function(req,res){
-    //     res.setHeader('Content-Type', 'application/json');
-    //     res.end(JSON.stringify({ a: 1 }));
-    // });
-    
-    // let dis = require('./files/hoteli.json');
-    // console.log(dis);
-    // res.end(dis.toString());
-
-});
 
 // filtrirani podaci
 app.post('/', async (req, res) => {
@@ -120,7 +107,7 @@ app.post('/', async (req, res) => {
 
         var json = format(`COPY (select json_agg(row_to_json(hoteli)) FROM (%s) hoteli) to '%s'`, downloadSelect, jsonPath);
         var csv = format(`COPY (%s) TO '%s' DELIMITER ',' ENCODING 'utf-8' CSV HEADER`, downloadSelect, csvPath);
-
+        
     
     // postavljen je samo parametar vrijednosti
     } else if (!req.body.searchattr) {
@@ -251,10 +238,8 @@ app.post('/', async (req, res) => {
 });
 
 function isNum(num) {
-    if (num === 'hotel.brojzvjezdica' ||
-        num === 'ratings.googlerating' ||
-        num === 'ratings.bookingrating' ||
-        num === 'ratings.trigavorating')
+    if (num === 'hotel.brojzvjezdica' || num === 'ratings.googlerating' ||
+        num === 'ratings.bookingrating' || num === 'ratings.trigavorating')
         return true;
     else
         return false;
