@@ -5,12 +5,12 @@ const app = express();
 // const http = require('http');
 const fs = require("fs");
 // const axios = require("axios");
-const api = require("./routes/api.route");
+const api = require('./routes/api.route');
 var format = require('pg-format');
 const pool = require('./db/pgadmin');
 
 
-app.use("/getdata", api);
+app.use("/api/hoteli", api);
 
 
 app.set('view engine', 'ejs');
@@ -24,7 +24,7 @@ app.use(express.urlencoded({extended: true}));
 var count = fs.readFile("hoteli.json", "utf-8", (err, data) => {
     if (err) throw err;
     count = JSON.parse(data).length;
-    console.log(count);
+    // console.log(count);
     return count;
 });
 
