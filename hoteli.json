@@ -9,7 +9,7 @@
         "ratings": {
             "googlerating": 4.6,
             "bookingrating": 9.3,
-            "tivagorating": 8.9
+            "trivagorating": 8.9
         },
         "weburl": "https://www.admiralhotel.hr/",
         "telefon": "013322901",
@@ -25,7 +25,7 @@
         "ratings": {
             "googlerating": 4.6,
             "bookingrating": 8.8,
-            "tivagorating": 8.9
+            "trivagorating": 8.9
         },
         "weburl": "https://www.hilton.com/en/hotels/zagcrdi-doubletree-zagreb/",
         "telefon": "016001900",
@@ -41,7 +41,7 @@
         "ratings": {
             "googlerating": 4.7,
             "bookingrating": 9.2,
-            "tivagorating": 9.2
+            "trivagorating": 9.2
         },
         "weburl": "https://www.esplanade.hr/",
         "telefon": "014566666",
@@ -57,7 +57,7 @@
         "ratings": {
             "googlerating": 4,
             "bookingrating": 8,
-            "tivagorating": 7.9
+            "trivagorating": 7.9
         },
         "weburl": "http://www.gardenhotel.hr/",
         "telefon": "014843720",
@@ -73,7 +73,7 @@
         "ratings": {
             "googlerating": 4.5,
             "bookingrating": 8.9,
-            "tivagorating": 8.5
+            "trivagorating": 8.5
         },
         "weburl": "https://www.hotelacademia.hr/",
         "telefon": "014550046",
@@ -89,7 +89,7 @@
         "ratings": {
             "googlerating": 4.5,
             "bookingrating": 9.1,
-            "tivagorating": 8.6
+            "trivagorating": 8.6
         },
         "weburl": "https://antunovic.hr/",
         "telefon": "012041200",
@@ -105,7 +105,7 @@
         "ratings": {
             "googlerating": 4.1,
             "bookingrating": 8.4,
-            "tivagorating": 8.1
+            "trivagorating": 8.1
         },
         "weburl": "https://www.hotel-aristos.hr/",
         "telefon": "016695900",
@@ -121,7 +121,7 @@
         "ratings": {
             "googlerating": 4.5,
             "bookingrating": 8.9,
-            "tivagorating": 8.8
+            "trivagorating": 8.8
         },
         "weburl": "https://www.hotel-aristos.hr/",
         "telefon": "016530000",
@@ -137,7 +137,7 @@
         "ratings": {
             "googlerating": 4.5,
             "bookingrating": 8.9,
-            "tivagorating": 8.5
+            "trivagorating": 8.5
         },
         "weburl": "https://www.hotel-dubrovnik.hr/",
         "telefon": "014863555",
@@ -153,7 +153,7 @@
         "ratings": {
             "googlerating": 4.1,
             "bookingrating": 8.5,
-            "tivagorating": 9
+            "trivagorating": 9
         },
         "weburl": null,
         "telefon": "014553777",
@@ -169,7 +169,7 @@
         "ratings": {
             "googlerating": 4.5,
             "bookingrating": 8.8,
-            "tivagorating": 8.5
+            "trivagorating": 8.5
         },
         "weburl": null,
         "telefon": "016108800",
@@ -185,7 +185,7 @@
         "ratings": {
             "googlerating": 4.7,
             "bookingrating": 9,
-            "tivagorating": 8.9
+            "trivagorating": 8.9
         },
         "weburl": "https://www.hotel-jagerhorn.hr/",
         "telefon": "014833877",
@@ -201,7 +201,7 @@
         "ratings": {
             "googlerating": 4.6,
             "bookingrating": 9.1,
-            "tivagorating": 8.8
+            "trivagorating": 8.8
         },
         "weburl": "https://www.lepremier.hr/",
         "telefon": "014400880",
@@ -217,7 +217,7 @@
         "ratings": {
             "googlerating": 4.1,
             "bookingrating": 8.3,
-            "tivagorating": 8.2
+            "trivagorating": 8.2
         },
         "weburl": "https://www.meridijan16.com/hr/",
         "telefon": "016065200",
@@ -233,27 +233,11 @@
         "ratings": {
             "googlerating": 4.3,
             "bookingrating": 8.5,
-            "tivagorating": 8.3
+            "trivagorating": 8.3
         },
         "weburl": "https://www.hotelorientexpress.com/",
         "telefon": "014954210",
         "email": "info@hotelorientexpress.com"
-    },
-    {
-        "naziv": "Sheraton",
-        "adresa": "Ulica kneza Borne 2",
-        "grad": "Zagreb",
-        "zupanija": "Grad Zagreb",
-        "drzava": "Republika Hrvatska",
-        "brojzvjezdica": 5,
-        "ratings": {
-            "googlerating": 4.5,
-            "bookingrating": 8.7,
-            "tivagorating": 8.2
-        },
-        "weburl": null,
-        "telefon": "014553535",
-        "email": null
     },
     {
         "naziv": "The Westin Zagreb",
@@ -265,10 +249,26 @@
         "ratings": {
             "googlerating": 4.4,
             "bookingrating": 8.4,
-            "tivagorating": 8.2
+            "trivagorating": 8.2
         },
         "weburl": null,
         "telefon": "014892000",
         "email": "westin.zagreb@westin.com"
+    },
+    {
+        "naziv": "Sheraton",
+        "adresa": "Ulica kneza Borne 2",
+        "grad": "Zagreb",
+        "zupanija": "Grad Zagreb",
+        "drzava": "Republika Hrvatska",
+        "brojzvjezdica": 5,
+        "ratings": {
+            "googlerating": 4.5,
+            "bookingrating": 8.7,
+            "trivagorating": 8.2
+        },
+        "weburl": null,
+        "telefon": "014553535",
+        "email": null
     }
 ]
