@@ -81,8 +81,10 @@ const attributes2 = [{display: 'Naziv', sql: 'hotel.naziv'},
                     {display: 'Broj telefona', sql: 'kontakt.brojtelefona'},
                     {display: 'Email', sql: 'kontakt.email'}
                     ];
-
-
+// prikaz stranice s metapodacima
+app.get('/metapodaci', async (req, res) => {
+    res.render('index');
+})
 // prikaz svih podataka pri ucitavanju stranice
 app.get('/', async (req, res) => {
     // promjena original fileova u slucaju updateanja baze
@@ -95,7 +97,6 @@ app.get('/', async (req, res) => {
     const results = await pool.query(displaySelect);
 
     res.render('datatable', {
-        text: 'world',
         rows: results.rows,
         attributes: attributes,
         attributes2: attributes2
