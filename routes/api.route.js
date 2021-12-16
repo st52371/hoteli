@@ -9,6 +9,7 @@ const pool = require('../db/pgadmin');
 
 const bodyParser = require('body-parser'); // mozda mi ne treba??
 const { max } = require('pg/lib/defaults');
+const e = require('express');
 apiRouter.use(bodyParser.urlencoded({extended: true}));
 apiRouter.use(express.json());
 
@@ -202,8 +203,51 @@ apiRouter.post('/', async (req, res) => {
             telefon, email);
 
     // dodaj u bazu
+    // console.log('tu smo')
+    // await pool.query(hmmmm);
 
-    // dodaj u bazu
+    // drzava
+    var pokusaj = (await pool.query(format(`SELECT nazivDrzave FROM drzave WHERE nazivDrzave like '%s'`, drzava))).rows[0];
+    if (!pokusaj) await pool.query(format(`INSERT INTO drzave (nazivDrzave) VALUES('%s');`, drzava));
+    // zupanija
+    pokusaj = (await pool.query(format(`SELECT nazivZupanije FROM zupanije WHERE nazivZupanije like '%s'`, zupanija))).rows[0];
+    if (!pokusaj) await pool.query(format(`INSERT INTO zupanije (nazivZupanije, drzavaId)
+                VALUES ('%s', (SELECT drzavaId FROM drzave WHERE nazivdrzave LIKE '%s'));`, zupanija, drzava));
+    // grad
+    pokusaj = (await pool.query(format(`SELECT nazivGrada FROM gradovi WHERE nazivGrada like '%s'`, grad))).rows[0];
+    if (!pokusaj) await pool.query(format(`INSERT INTO gradovi (nazivGrada, zupanijaId) VALUES
+                ('%s', (SELECT zupanijaId FROM zupanije WHERE nazivZupanije LIKE '%s'));`, grad, zupanija));
+    // ulica
+    pokusaj = (await pool.query(format(`SELECT nazivUlice FROM ulice WHERE nazivUlice like '%s'`, ulica))).rows[0];
+    if (!pokusaj) await pool.query(format(`INSERT INTO ulice (nazivUlice, gradId) VALUES
+                ('%s', (SELECT gradId FROM gradovi WHERE nazivGrada LIKE '%s'));`, ulica, grad));
+    // adresa
+    // pokusaj = (await pool.query(format(`SELECT * FROM adrese
+    //             WHERE ulicaid=%s and broj=%s and dodatnaoznaka %s`, ulicaid, broj, sqlNull))).rows[0];
+    // pokusaj = (await pool.query(format(`SELECT ulicaid, broj, dodatnaoznaka FROM adrese
+    //             WHERE ulicaid=%s and broj=%s and dodatnaoznaka is like '%s'`, ulicaid, broj, dodatnaOznaka))).rows[0];
+    // ratings
+    pokusaj = (await pool.query(format(`SELECT * FROM ratings WHERE
+                googlerating=%s and bookingrating=%s and trivagorating=%s`, googlerating, bookingrating, trivagorating))).rows[0];
+    if (!pokusaj) await pool.query(format(`INSERT INTO ratings
+                (googlerating, bookingrating, trivagorating) VALUES (%s, %s, %s);`), googlerating, bookingrating, trivagorating);
+    // kontakt
+    pokusaj = (await pool.query(format(`SELECT * FROM kontakt WHERE
+                brojtelefona like '%s' and email like '%s'`, telefon, email))).rows[0];
+    if (!pokusaj) await pool.query(format(`INSERT INTO kontakt (brojtelefona, email) VALUES ('%s', '%s');`, telefon, email));
+    // hotel
+    pokusaj = (await pool.query(format(`SELECT * FROM hotel LEFT JOIN adrese USING(adresaid)
+                LEFT JOIN ulice USING (ulicaid) LEFT JOIN gradovi using (gradid) WHERE
+                naziv like '%s' and nazivgrada like '%s'`, naziv, grad))).rows[0];
+    // ovo ce te zajebavat kod dodatneoznake
+    if (!pokusaj) await pool.query(format(`INSERT INTO hotel (naziv, adresaid, brojzvjezdica, ratingid, weburl, kontaktid) VALUES
+                ('%s', (SELECT adresaid FROM adrese WHERE (ulicaid=%s and broj=%s and dodatnaoznaka %s)),
+                %s, (SELECT ratingid FROM ratings WHERE (googlerating=%s and bookingrating=%s and trigavorating=%s)),
+                '%s', (SELECT kontaktid FROM kontakt WHERE (brojtelefona like '%s' and email like '%s');`));
+
+    console.log(pokusaj);
+
+    // dodaj u bazu ili vec postoji
     var maxidAfter = (await pool.query(`select max(hotelid) from hotel`)).rows[0].max;
     if (maxidBefore === maxidAfter) {
         var response = format(`{
@@ -229,7 +273,6 @@ apiRouter.post('/', async (req, res) => {
             'message' : 'The request succeeded, and a new resource was created as a result',
             'Content-type': 'application/json'
         });
-        
     }
     response = JSON.parse(response)
     res.status(200).send(response);
@@ -238,6 +281,42 @@ apiRouter.post('/', async (req, res) => {
 //e) /api/hoteli/:id
 apiRouter.put('/:id', async (req, res) => {
     const id = req.params.id;
+    var ids = (await pool.query('select hotelid from hotel')).rows;
+    if (isNaN(id)) {
+        res.set({
+            'method' : 'GET',
+            'status' : '400 Bad Request',
+            'message' : "The server could not understand the request due to invalid syntax.",
+            'Content-type': 'application/json'
+        });
+        let response = {
+            'status' : "Bad Request",
+            'message' : "The server could not understand the request due to invalid syntax.",
+            "response" : null
+        };
+        res.status(400).send(response);
+    }
+    let postoji = false;
+    for (var i = 0; i < ids.length; i++) {
+        if (id === ids[i].hotelid.toString()) {
+            postoji = true;
+            break;
+        }
+    }
+    if (!postoji) {
+        res.set({
+            'method' : 'GET',
+            'status' : '404 Not Found',
+            'message' : "Hotel with the provided id doesn't exist",
+            'Content-type': 'application/json'
+        });
+        let response = {
+            'status' : "Not Found",
+            'message' : "Hotel with the provided id doesn't exist",
+            'response' : null
+        };
+        res.status(404).send(response);
+    }
     const body = req.body;
     var sqlic = format(`UPDATE hotel
             SET naziv = 'Sheraton'
@@ -254,6 +333,47 @@ apiRouter.put('/:id', async (req, res) => {
 
 //f) /api/hoteli/:id
 apiRouter.delete('/:id', (req, res) => {
+    // const id = req.params.id;
+    // var ids = (await pool.query('select hotelid from hotel')).rows;
+    // if (isNaN(id)) {
+    //     res.set({
+    //         'method' : 'GET',
+    //         'status' : '400 Bad Request',
+    //         'message' : "The server could not understand the request due to invalid syntax.",
+    //         'Content-type': 'application/json'
+    //     });
+    //     let response = {
+    //         'status' : "Bad Request",
+    //         'message' : "The server could not understand the request due to invalid syntax.",
+    //         "response" : null
+    //     };
+    //     res.status(400).send(response);
+    // }
+    // let postoji = false;
+    // for (var i = 0; i < ids.length; i++) {
+    //     if (id === ids[i].hotelid.toString()) {
+    //         postoji = true;
+    //         break;
+    //     }
+    // }
+    // if (!postoji) {
+    //     res.set({
+    //         'method' : 'GET',
+    //         'status' : '404 Not Found',
+    //         'message' : "Hotel with the provided id doesn't exist",
+    //         'Content-type': 'application/json'
+    //     });
+    //     let response = {
+    //         'status' : "Not Found",
+    //         'message' : "Hotel with the provided id doesn't exist",
+    //         'response' : null
+    //     };
+    //     res.status(404).send(response);
+    // }
+    // // var select = (await pool.query(format(`SELECT adresaid, ratingid, kontaktid FROM hotel WHERE hotelid=%s`, id))).rows[0];
+    // // console.log(select)
+    // // var sql = format(`DELETE FROM hotel WHERE hotelid=%s`, id);
+    res.status(200);
 
 });
 
