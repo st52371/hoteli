@@ -1,0 +1,120 @@
+{
+    "openapi": "1.0.0",
+    "info": {
+        "title": "Skup podataka hotela",
+        "version": "1.0.1",
+        "license": "MIT License",
+        "contact": {
+            "name": "API Support",
+            "url": "/",
+            "email": "st52371@fer.hr"
+        }
+    },
+    "paths": {
+        "/api/hoteli": {
+            "get": {
+                "description": "Returns a collection",
+                "responses": {
+                    "200": {
+                        "message": "All data fetched"
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new collection resource",
+                "responses": {
+                    "200": {
+                        "message": "Hotel with the provided information already exists"
+                    },
+                    "201": {
+                        "message": "The request succeeded, and a new resource was created as a result"
+                    }
+                }
+            }
+        },
+        "/api/hoteli/nazivi": {
+            "get": {
+                "description": "Returns a json of nazivi in the collection",
+                "responses": {
+                    "200": {
+                        "message": "All nazivi fetched"
+                    }
+                }
+            }
+        },
+        "/api/hoteli/gradovi": {
+            "get": {
+                "description": "Returns a json of gradovi in the collection",
+                "responses": {
+                    "200": {
+                        "message": "All gradovi fetched"
+                    }
+                }
+            }
+        },
+        "/api/hoteli/ulice": {
+            "get": {
+                "description": "Returns a json of ulice in the collection",
+                "responses": {
+                    "200": {
+                        "message": "All ulice fetched"
+                    }
+                }
+            }
+        },
+        "/api/hoteli/{id}": {
+            "get": {
+                "description": "Returns a resource with the provided id",
+                "responses": {
+                    "200": {
+                        "message": "Data with the provided id fetched"
+                    },
+                    "400": {
+                        "message" : "The server could not understand the request due to invalid syntax."
+                    },
+                    "404": {
+                        "message" : "Hotel with the provided id doesn't exist"
+                    }
+                }
+            },
+            "put": {
+                "description": "Returns a changed resource with the provided id",
+                "responses": {
+                    "200": {
+                        "message": "The request succeeded"
+                    },
+                    "400": {
+                        "message" : "The server could not understand the request due to invalid syntax."
+                    },
+                    "404": {
+                        "message" : "Hotel with the provided id doesn't exist"
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes a resource with the provided id",
+                "responses": {
+                    "200": {
+                        "message": "Hotel with the provided id successfully deleted"
+                    },
+                    "400": {
+                        "message" : "The server could not understand the request due to invalid syntax."
+                    },
+                    "404": {
+                        "message" : "Hotel with the provided id doesn't exist"
+                    }
+                }
+            }
+        },
+        "/api/hoteli/openapi": {
+            "get": {
+                "description": "Returns the OpenAPI specification",
+                "responses": {
+                    "200": {
+                        "message": "Successfully fetched the OpenAPI specification"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -37,6 +37,27 @@ const downloadSelect = `SELECT hotel.naziv, ulice.nazivulice || ' ' || adrese.br
         LEFT JOIN ratings ON hotel.ratingid = ratings.ratingid
         LEFT JOIN kontakt ON hotel.kontaktid = kontakt.kontaktid`;
 
+// na /api/hoteli/openapi
+apiRouter.get('/openapi', async (req, res) => {
+    fs.readFile("OpenAPI.json", "utf-8", function (err, data) {
+        if (err) throw err;
+        data = JSON.parse(data);
+
+        let response = format(`{
+            "status": "200 OK",
+            "message": "Successfully fetched the OpenAPI specification",
+            "response": [%s]
+        }`, data);
+        res.set({
+            'method' : 'GET',
+            'status' : '200 OK',
+            'message' : 'Successfully fetched the OpenAPI specification',
+            'Content-type': 'application/json'            
+        });
+        res.status(200).send(response);
+    });
+});
+
 
 //a) na /api/hoteli
 apiRouter.get('/', async (req, res) => {
@@ -390,7 +411,7 @@ apiRouter.delete('/:id', async (req, res) => {
                 DELIMITER ',' ENCODING 'utf-8' CSV HEADER`, downloadSelect);
     await pool.query(json);
     await pool.query(csv);
-    
+
     res.status(200).send(response);
 
 });
