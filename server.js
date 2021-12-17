@@ -247,6 +247,36 @@ app.post('/', async (req, res) => {
 
 });
 
+app.use((req, res) => {
+    console.log(req.method)
+    if(req.method !== 'GET' && req.method !== 'POST' && req.method !== 'PUT' && req.method !== 'DELETE') {
+        let response = {
+            "status": "501 Not Implemented",
+            "message": "The request method is not supported by the server and cannot be handled.",
+            "response": null
+        }
+        res.set({
+            'method' : req.method,
+            'status' : '501 Not Implemented',
+            'message' : 'The request method is not supported by the server and cannot be handled.',
+            'Content-type': 'application/json'            
+        });
+        res.status(501).send(response);
+    }
+    let response = {
+        "status": "404 Not Found",
+        "message": "The server can not find the requested resource. Given URL is not recognized.",
+        "response": null
+    }
+    res.set({
+        'method' : req.method,
+        'status' : '404 Not Found',
+        'message' : 'The server can not find the requested resource. Given URL is not recognized.',
+        'Content-type': 'application/json'            
+    });
+    res.status(404).send(response);
+});
+
 function isNum(num) {
     if (num === 'hotel.brojzvjezdica' || num === 'ratings.googlerating' ||
         num === 'ratings.bookingrating' || num === 'ratings.trigavorating')
