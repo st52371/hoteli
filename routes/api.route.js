@@ -1,16 +1,10 @@
 
-const { resolveSoa } = require('dns');
 const express = require('express');
-// const { json } = require('express/lib/response');
 const fs = require('fs');
 var format = require('pg-format');
 const apiRouter = express.Router();
-// const aplikacija = require('../server');
 const pool = require('../db/pgadmin');
 
-// const bodyParser = require('body-parser'); // mozda mi ne treba??
-// const { max } = require('pg/lib/defaults');
-// apiRouter.use(bodyParser.urlencoded({extended: true}));
 apiRouter.use(express.json());
 
 const selectWithId = `SELECT hotel.hotelid, hotel.naziv, ulice.nazivulice || ' ' || adrese.broj::TEXT ||
@@ -32,6 +26,16 @@ const displaySelect = `SELECT hotel.naziv, ulice.nazivulice || ' ' || adrese.bro
         NATURAL JOIN ulice NATURAL JOIN gradovi NATURAL JOIN zupanije
         NATURAL JOIN drzave LEFT JOIN ratings ON hotel.ratingid = ratings.ratingid
         LEFT JOIN kontakt ON hotel.kontaktid = kontakt.kontaktid`;
+const downloadSelect = `SELECT hotel.naziv, ulice.nazivulice || ' ' || adrese.broj::TEXT ||
+        CASE WHEN adrese.dodatnaoznaka IS NULL THEN '' ELSE adrese.dodatnaoznaka END AS adresa,
+        gradovi.nazivgrada AS grad, zupanije.nazivzupanije AS zupanija,drzave.nazivdrzave AS drzava,
+        hotel.brojzvjezdica, json_build_object('googlerating', ratings.googlerating,
+            'bookingrating', ratings.bookingrating, 'trivagorating', ratings.trivagorating) AS ratings,
+        hotel.weburl,kontakt.brojtelefona AS telefon, kontakt.email AS email
+        FROM hotel LEFT JOIN adrese ON hotel.adresaid = adrese.adresaid
+        NATURAL JOIN ulice NATURAL JOIN gradovi NATURAL JOIN zupanije NATURAL JOIN drzave
+        LEFT JOIN ratings ON hotel.ratingid = ratings.ratingid
+        LEFT JOIN kontakt ON hotel.kontaktid = kontakt.kontaktid`;
 
 
 //a) na /api/hoteli
@@ -39,7 +43,6 @@ apiRouter.get('/', async (req, res) => {
     fs.readFile("./hoteli.json", "utf-8", function (err, data) {
         if (err) throw err;
         data = JSON.parse(data);
-        // console.log(data)
 
         let response = format(`{
             "status": "200 OK",
@@ -56,48 +59,67 @@ apiRouter.get('/', async (req, res) => {
     });
 });
 
+//c) /api/hoteli/gradovi
+apiRouter.get('/gradovi', async (req, res) => {
+    var data = (await (await pool.query(`SELECT nazivgrada FROM gradovi`))).rows;
+    
+    let response = format(`{
+        "status": "200 OK",
+        "message": "All gradovi fetched",
+        "response": [%s]
+    }`, data);
+    res.set({
+        'method' : 'GET',
+        'status' : '200 OK',
+        'message' : 'All gradovi fetched',
+        'Content-type': 'application/json'            
+    });
+    res.status(200).send(response);
+    
+});
+// /api/hoteli/ulice
+apiRouter.get('/ulice', async (req, res) => {
+    var data = (await (await pool.query(`SELECT nazivulice FROM ulice`))).rows;
+
+    let response = format(`{
+        "status": "200 OK",
+        "message": "All ulice fetched",
+        "response": [%s]
+    }`, data);
+    res.set({
+        'method' : 'GET',
+        'status' : '200 OK',
+        'message' : 'All ulice fetched',
+        'Content-type': 'application/json'            
+    });
+    res.status(200).send(response);
+})
+// /api/hoteli/nazivi   
+apiRouter.get('/nazivi', async (req, res) => {
+    var data = (await (await pool.query(`SELECT naziv FROM hotel`))).rows;
+
+    let response = format(`{
+        "status": "200 OK",
+        "message": "All nazivi fetched",
+        "response": [%s]
+    }`, data);
+    res.set({
+        'method' : 'GET',
+        'status' : '200 OK',
+        'message' : 'All nazivi fetched',
+        'Content-type': 'application/json'            
+    });
+    res.status(200).send(response);
+})
+
+
+
 //b) na /api/hoteli/:id
 apiRouter.get('/:id', async (req, res) => {
     const id = req.params.id;
-    // var maxid = (await pool.query(`select max(hotelid) from hotel`)).rows[0].max;
-    var ids = (await pool.query('select hotelid from hotel')).rows;
+    
+    idChecker(id, req.method, res)
 
-    if (isNaN(id)) {
-        res.set({
-            'method' : 'GET',
-            'status' : '400 Bad Request',
-            'message' : "The server could not understand the request due to invalid syntax.",
-            'Content-type': 'application/json'
-        });
-        let response = {
-            'status' : "400 Bad Request",
-            'message' : "The server could not understand the request due to invalid syntax.",
-            "response" : null
-        };
-        res.status(400).send(response);
-    }
-
-    let postoji = false;
-    for (var i = 0; i < ids.length; i++) {
-        if (id === ids[i].hotelid.toString()) {
-            postoji = true;
-            break;
-        }
-    }
-    if (!postoji) {
-        res.set({
-            'method' : 'GET',
-            'status' : '404 Not Found',
-            'message' : "Hotel with the provided id doesn't exist",
-            'Content-type': 'application/json'
-        });
-        let response = {
-            'status' : "404 Not Found",
-            'message' : "Hotel with the provided id doesn't exist",
-            'response' : null
-        };
-        res.status(404).send(response);
-    }
     var sqlic = format(`%s WHERE hotel.hotelid=%s`, selectWithId, id);
     var api = format(`COPY (select json_agg(row_to_json(hoteli)) FROM (%s) hoteli)
                     to 'D:/fax/or/labosi/gitty/hoteli/files/api.json'`, sqlic);
@@ -119,19 +141,15 @@ apiRouter.get('/:id', async (req, res) => {
             'Content-type': 'application/json',
             'warning': "with content type charset encoding will be added by default"
         });
-        // res.send(200, response);
+
         res.status(200).send(response);
     }); 
 });
 
 
-//c)
-
-
 //d) /api/hoteli
 apiRouter.post('/', async (req, res) => {
     var maxidBefore = (await pool.query(`select max(hotelid) from hotel`)).rows[0].max;
-    var ids = (await pool.query('select hotelid from hotel')).rows;
 
     if (!req.body.naziv || !req.body.adresa || !req.body.grad || !req.body.zupanija ||
         !req.body.drzava || !req.body.brojzvjezdica || !req.body.googlerating ||
@@ -183,39 +201,32 @@ apiRouter.post('/', async (req, res) => {
     // drzava
     var pokusaj = (await pool.query(format(`SELECT nazivDrzave FROM drzave WHERE nazivDrzave like '%s'`, drzava))).rows[0];
     if (!pokusaj) await pool.query(format(`INSERT INTO drzave (nazivDrzave) VALUES('%s');`, drzava));
-    // console.log(pokusaj);
     // zupanija
     pokusaj = (await pool.query(format(`SELECT nazivZupanije FROM zupanije WHERE nazivZupanije like '%s'`, zupanija))).rows[0];
     if (!pokusaj) await pool.query(format(`INSERT INTO zupanije (nazivZupanije, drzavaId)
                 VALUES ('%s', (SELECT drzavaId FROM drzave WHERE nazivdrzave LIKE '%s'));`, zupanija, drzava));
-    // console.log(pokusaj);
     // grad
     pokusaj = (await pool.query(format(`SELECT nazivGrada FROM gradovi WHERE nazivGrada like '%s'`, grad))).rows[0];
     if (!pokusaj) await pool.query(format(`INSERT INTO gradovi (nazivGrada, zupanijaId) VALUES
                 ('%s', (SELECT zupanijaId FROM zupanije WHERE nazivZupanije LIKE '%s'));`, grad, zupanija));
-    // console.log(pokusaj);
     // ulica
     pokusaj = (await pool.query(format(`SELECT nazivUlice FROM ulice WHERE nazivUlice like '%s'`, ulica))).rows[0];
     if (!pokusaj) await pool.query(format(`INSERT INTO ulice (nazivUlice, gradId) VALUES
                 ('%s', (SELECT gradId FROM gradovi WHERE nazivGrada LIKE '%s'));`, ulica, grad));
-    // console.log(pokusaj);
     // adresa
     pokusaj = (await pool.query(format(`SELECT * FROM adrese
                 WHERE ulicaid=%s and broj=%s and dodatnaoznaka %s`, ulicaid, broj, sqlNull))).rows[0];
     if (!pokusaj) await pool.query(format(`INSERT INTO adrese (ulicaId, broj, dodatnaOznaka) VALUES
                 (%s, %s, %s)`, ulicaid, broj, dodatnaOznaka));
-    // console.log(pokusaj);
     // ratings
     pokusaj = (await pool.query(format(`SELECT * FROM ratings WHERE
                 googlerating=%s and bookingrating=%s and trivagorating=%s`, googlerating, bookingrating, trivagorating))).rows[0];
     if (!pokusaj) await pool.query(format(`INSERT INTO ratings
                 (googlerating, bookingrating, trivagorating) VALUES (%s, %s, %s);`, googlerating, bookingrating, trivagorating));
-    // console.log(pokusaj);
     // kontakt
     pokusaj = (await pool.query(format(`SELECT * FROM kontakt WHERE
                 brojtelefona like '%s' and email like '%s'`, telefon, email))).rows[0];
     if (!pokusaj) await pool.query(format(`INSERT INTO kontakt (brojtelefona, email) VALUES ('%s', '%s');`, telefon, email));
-    // console.log(pokusaj);
     // hotel
     pokusaj = (await pool.query(format(`SELECT * FROM hotel LEFT JOIN adrese USING(adresaid)
                 LEFT JOIN ulice USING (ulicaid) LEFT JOIN gradovi using (gradid) WHERE
@@ -269,42 +280,9 @@ apiRouter.post('/', async (req, res) => {
 //e) /api/hoteli/:id
 apiRouter.put('/:id', async (req, res) => {
     const id = req.params.id;
-    var ids = (await pool.query('select hotelid from hotel')).rows;
-    if (isNaN(id)) {
-        res.set({
-            'method' : 'GET',
-            'status' : '400 Bad Request',
-            'message' : "The server could not understand the request due to invalid syntax.",
-            'Content-type': 'application/json'
-        });
-        let response = {
-            'status' : "400 Bad Request",
-            'message' : "The server could not understand the request due to invalid syntax.",
-            "response" : null
-        };
-        res.status(400).send(response);
-    }
-    let postoji = false;
-    for (var i = 0; i < ids.length; i++) {
-        if (id === ids[i].hotelid.toString()) {
-            postoji = true;
-            break;
-        }
-    }
-    if (!postoji) {
-        res.set({
-            'method' : 'GET',
-            'status' : '404 Not Found',
-            'message' : "Hotel with the provided id doesn't exist",
-            'Content-type': 'application/json'
-        });
-        let response = {
-            'status' : "404 Not Found",
-            'message' : "Hotel with the provided id doesn't exist",
-            'response' : null
-        };
-        res.status(404).send(response);
-    }
+    
+    idChecker(id, req.method, res)
+
     const body = req.body;
     const original = (await pool.query(format(`%s WHERE hotelid=%s`, displaySelect, id))).rows[0];
     if (body.naziv !== original.naziv) {
@@ -345,7 +323,6 @@ apiRouter.put('/:id', async (req, res) => {
     if (body.drzava !== body.drzava) {
     }
 
-
     if (body.brojzvjezdica !== original.brojzvjezdica) {
         await pool.query(format(`UPDATE hotel SET brojzvjezdica=%s WHERE hotelid=%s`, body.brojzvjezdica, id));
     }
@@ -381,7 +358,6 @@ apiRouter.put('/:id', async (req, res) => {
     await pool.query(json);
     await pool.query(csv);
 
-
     var response = format(`{
         "status": "200 OK",
         "message": "The request succeeded",
@@ -397,43 +373,15 @@ apiRouter.put('/:id', async (req, res) => {
 apiRouter.delete('/:id', async (req, res) => {
     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     const id = req.params.id;
-    var ids = (await pool.query('select hotelid from hotel')).rows;
-    if (isNaN(id)) {
-        res.set({
-            'method' : 'GET',
-            'status' : '400 Bad Request',
-            'message' : "The server could not understand the request due to invalid syntax.",
-            'Content-type': 'application/json'
-        });
-        let response = {
-            'status' : "400 Bad Request",
-            'message' : "The server could not understand the request due to invalid syntax.",
-            "response" : null
-        };
-        res.status(400).send(response);
-    }
-    let postoji = false;
-    for (var i = 0; i < ids.length; i++) {
-        if (id === ids[i].hotelid.toString()) {
-            postoji = true;
-            break;
-        }
-    }
-    // console.log(req.method)
-    if (!postoji) {
-        res.set({
-            'method' : 'GET',
-            'status' : '404 Not Found',
-            'message' : "Hotel with the provided id doesn't exist",
-            'Content-type': 'application/json'
-        });
-        let response = {
-            'status' : "404 Not Found",
-            'message' : "Hotel with the provided id doesn't exist",
-            'response' : null
-        };
-        res.status(404).send(response);
-    }
+    
+    idChecker(id, req.method, res);
+
+    await pool.query(format(`DELETE FROM hotel WHERE hotelid=%s`, id));
+    var response = {
+        "status": "200 OK",
+        "message": "Hotel with the provided id successfully deleted",
+        "response": null
+    };
 
     // promjena original json i csv fileova baze
     var json = format(`COPY (select json_agg(row_to_json(hoteli))
@@ -443,12 +391,6 @@ apiRouter.delete('/:id', async (req, res) => {
     await pool.query(json);
     await pool.query(csv);
     
-    await pool.query(format(`DELETE FROM hotel WHERE hotelid=%s`, id));
-    var response = {
-        "status": "200 OK",
-        "message": "Hotel with the provided id successfully deleted",
-        "response": null
-    };
     res.status(200).send(response);
 
 });
@@ -482,5 +424,47 @@ apiRouter.use((req, res) => {
     });
     res.status(404).send(response);
 });
+
+
+async function idChecker(id, method, res) {
+    var ids = (await pool.query('select hotelid from hotel')).rows;
+    if (isNaN(id)) {
+        res.set({
+            'method' : method,
+            'status' : '400 Bad Request',
+            'message' : "The server could not understand the request due to invalid syntax.",
+            'Content-type': 'application/json'
+        });
+        let response = {
+            'status' : "400 Bad Request",
+            'message' : "The server could not understand the request due to invalid syntax.",
+            "response" : null
+        };
+        res.status(400).send(response);
+    }
+    let postoji = false;
+    for (var i = 0; i < ids.length; i++) {
+        if (id === ids[i].hotelid.toString()) {
+            postoji = true;
+            break;
+        }
+    }
+    if (!postoji) {
+        res.set({
+            'method' : 'GET',
+            'status' : '404 Not Found',
+            'message' : "Hotel with the provided id doesn't exist",
+            'Content-type': 'application/json'
+        });
+        let response = {
+            'status' : "404 Not Found",
+            'message' : "Hotel with the provided id doesn't exist",
+            'response' : null
+        };
+        res.status(404).send(response);
+    }
+}
+
+
 
 module.exports = apiRouter;

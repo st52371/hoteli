@@ -1,32 +1,18 @@
 
 const express = require('express');
 const app = express();
-// const {Pool} = require('pg');
-// const http = require('http');
 const fs = require("fs");
-// const axios = require("axios");
 const api = require('./routes/api.route');
 var format = require('pg-format');
 const pool = require('./db/pgadmin');
 
-
 app.use("/api/hoteli", api);
-
 
 app.set('view engine', 'ejs');
 // to serve static files
 app.use(express.static(__dirname));
 // da mozemo accessat stvari iz bodya
 app.use(express.urlencoded({extended: true}));
-
-
-// var count = 0;
-// var count = fs.readFile("hoteli.json", "utf-8", (err, data) => {
-//     if (err) throw err;
-//     count = JSON.parse(data).length;
-//     return count;
-// });
-
 
 
 const downloadSelect = `SELECT hotel.naziv, ulice.nazivulice || ' ' || adrese.broj::TEXT ||
@@ -50,16 +36,6 @@ const displaySelect = `SELECT hotel.naziv, ulice.nazivulice || ' ' || adrese.bro
         NATURAL JOIN drzave LEFT JOIN ratings ON hotel.ratingid = ratings.ratingid
         LEFT JOIN kontakt ON hotel.kontaktid = kontakt.kontaktid`;
 
-// const selectWithId = `SELECT hotel.hotelid, hotel.naziv, ulice.nazivulice || ' ' || adrese.broj::TEXT ||
-//         CASE WHEN adrese.dodatnaoznaka IS NULL THEN '' ELSE adrese.dodatnaoznaka END AS adresa,
-//         gradovi.nazivgrada AS grad, zupanije.nazivzupanije AS zupanija,drzave.nazivdrzave AS drzava,
-//         hotel.brojzvjezdica, json_build_object('googlerating', ratings.googlerating,
-//             'bookingrating', ratings.bookingrating, 'tivagorating', ratings.trivagorating) AS ratings,
-//         hotel.weburl,kontakt.brojtelefona AS telefon, kontakt.email AS email
-//         FROM hotel LEFT JOIN adrese ON hotel.adresaid = adrese.adresaid
-//         NATURAL JOIN ulice NATURAL JOIN gradovi NATURAL JOIN zupanije NATURAL JOIN drzave
-//         LEFT JOIN ratings ON hotel.ratingid = ratings.ratingid
-//         LEFT JOIN kontakt ON hotel.kontaktid = kontakt.kontaktid`;
 
 // putanje za saveanje filtriranih fileova
 const jsonPath = 'D:/fax/or/labosi/gitty/hoteli/files/hoteli.json';
