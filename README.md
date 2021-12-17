@@ -1,5 +1,5 @@
 # Hoteli skup podataka
-- otvoreni skup podataka hotela
+- otvoreni skup podataka hotela za predmet Otvoreno Računarstvo
 ## Licencija
 - MIT License
 ## Autor
