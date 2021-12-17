@@ -1,5 +1,4 @@
 naziv,adresa,grad,zupanija,drzava,brojzvjezdica,ratings,weburl,telefon,email
-Admiral Hotel,Rudeška cesta 140,Zagreb,Grad Zagreb,Republika Hrvatska,4,"{""googlerating"" : 4.6, ""bookingrating"" : 9.3, ""trivagorating"" : 8.9}",https://www.admiralhotel.hr/,013322901,info@admiralhotel.hr
 Double Tree by Hilton,Ulica grada Vukovara 269A,Zagreb,Grad Zagreb,Republika Hrvatska,5,"{""googlerating"" : 4.6, ""bookingrating"" : 8.8, ""trivagorating"" : 8.9}",https://www.hilton.com/en/hotels/zagcrdi-doubletree-zagreb/,016001900,
 Esplanade,Ulica Antuna Mihanovića 1,Zagreb,Grad Zagreb,Republika Hrvatska,5,"{""googlerating"" : 4.7, ""bookingrating"" : 9.2, ""trivagorating"" : 9.2}",https://www.esplanade.hr/,014566666,info@esplanade.hr
 Garden Hotel,Vodnikova ulica 13,Zagreb,Grad Zagreb,Republika Hrvatska,4,"{""googlerating"" : 4, ""bookingrating"" : 8, ""trivagorating"" : 7.9}",http://www.gardenhotel.hr/,014843720,info@gardenhotel.hr
@@ -15,4 +14,7 @@ Hotel Le Premier,Ulica kralja Držislava 5,Zagreb,Grad Zagreb,Republika Hrvatska
 Hotel Meridijan16,Ulica grada Vukovara 241,Zagreb,Grad Zagreb,Republika Hrvatska,3,"{""googlerating"" : 4.1, ""bookingrating"" : 8.3, ""trivagorating"" : 8.2}",https://www.meridijan16.com/hr/,016065200,desk@meridijan16.com
 Orient Express,Trnjanska cesta 11E,Zagreb,Grad Zagreb,Republika Hrvatska,3,"{""googlerating"" : 4.3, ""bookingrating"" : 8.5, ""trivagorating"" : 8.3}",https://www.hotelorientexpress.com/,014954210,info@hotelorientexpress.com
 The Westin Zagreb,Ulica Izidora Kršnjavog 1,Zagreb,Grad Zagreb,Republika Hrvatska,5,"{""googlerating"" : 4.4, ""bookingrating"" : 8.4, ""trivagorating"" : 8.2}",,014892000,westin.zagreb@westin.com
+Sheraton,Rudeška cesta 2,Zagreb,Grad Zagreb,Republika Hrvatska,5,"{""googlerating"" : 4.5, ""bookingrating"" : 8.7, ""trivagorating"" : 8.2}",https://www.admiralhotel.hr/,013322901,info@admiralhotel.hr
 Sheraton,Ulica kneza Borne 2,Zagreb,Grad Zagreb,Republika Hrvatska,5,"{""googlerating"" : 4.5, ""bookingrating"" : 8.7, ""trivagorating"" : 8.2}",,014553535,
+Hotel Park 45,Ilica 45,Zagreb,Grad Zagreb,Republika Hrvatska,4,"{""googlerating"" : 4.6, ""bookingrating"" : 9.3, ""trivagorating"" : 9.1}",https://www.hotelpark45.hr/,014095999,info@hotelpark45.hr
+Hotel President,Pantovčak 52,Zagreb,Grad Zagreb,Republika Hrvatska,4,"{""googlerating"" : 4.5, ""bookingrating"" : 8.7, ""trivagorating"" : 8.6}",http://www.president-zagreb.com/,014881480,hotel@president-zagreb.com

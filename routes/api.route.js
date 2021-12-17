@@ -227,6 +227,13 @@ apiRouter.post('/', async (req, res) => {
                 naziv, ulicaid, broj, sqlNull, brojzvjezdica, googlerating, bookingrating, trivagorating,
                 weburl, telefon, email));
 
+    // promjena original json i csv fileova baze
+    var json = format(`COPY (select json_agg(row_to_json(hoteli))
+                FROM (%s) hoteli) to 'D:/fax/or/labosi/gitty/hoteli/hoteli.json'`, downloadSelect);
+    var csv = format(`COPY (%s) TO 'D:/fax/or/labosi/gitty/hoteli/hoteli.csv'
+                DELIMITER ',' ENCODING 'utf-8' CSV HEADER`, downloadSelect);
+    await pool.query(json);
+    await pool.query(csv);
 
     // dodaj u bazu ili vec postoji
     var maxidAfter = (await pool.query(`select max(hotelid) from hotel`)).rows[0].max;
@@ -365,6 +372,16 @@ apiRouter.put('/:id', async (req, res) => {
         await pool.query(format(`UPDATE kontakt SET email = '%' WHERE kontaktid=
                 (SELECT kontaktid FROM hotel WHERE hotelid=%s)`, body.email, id));
     }
+
+    // promjena original json i csv fileova baze
+    var json = format(`COPY (select json_agg(row_to_json(hoteli))
+                FROM (%s) hoteli) to 'D:/fax/or/labosi/gitty/hoteli/hoteli.json'`, downloadSelect);
+    var csv = format(`COPY (%s) TO 'D:/fax/or/labosi/gitty/hoteli/hoteli.csv'
+                DELIMITER ',' ENCODING 'utf-8' CSV HEADER`, downloadSelect);
+    await pool.query(json);
+    await pool.query(csv);
+
+
     var response = format(`{
         "status": "200 OK",
         "message": "The request succeeded",
@@ -417,6 +434,14 @@ apiRouter.delete('/:id', async (req, res) => {
         };
         res.status(404).send(response);
     }
+
+    // promjena original json i csv fileova baze
+    var json = format(`COPY (select json_agg(row_to_json(hoteli))
+                FROM (%s) hoteli) to 'D:/fax/or/labosi/gitty/hoteli/hoteli.json'`, downloadSelect);
+    var csv = format(`COPY (%s) TO 'D:/fax/or/labosi/gitty/hoteli/hoteli.csv'
+                DELIMITER ',' ENCODING 'utf-8' CSV HEADER`, downloadSelect);
+    await pool.query(json);
+    await pool.query(csv);
     
     await pool.query(format(`DELETE FROM hotel WHERE hotelid=%s`, id));
     var response = {

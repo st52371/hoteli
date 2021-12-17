@@ -1,21 +1,5 @@
 [
     {
-        "naziv": "Admiral Hotel",
-        "adresa": "Rudeška cesta 140",
-        "grad": "Zagreb",
-        "zupanija": "Grad Zagreb",
-        "drzava": "Republika Hrvatska",
-        "brojzvjezdica": 4,
-        "ratings": {
-            "googlerating": 4.6,
-            "bookingrating": 9.3,
-            "trivagorating": 8.9
-        },
-        "weburl": "https://www.admiralhotel.hr/",
-        "telefon": "013322901",
-        "email": "info@admiralhotel.hr"
-    },
-    {
         "naziv": "Double Tree by Hilton",
         "adresa": "Ulica grada Vukovara 269A",
         "grad": "Zagreb",
@@ -257,6 +241,22 @@
     },
     {
         "naziv": "Sheraton",
+        "adresa": "Rudeška cesta 2",
+        "grad": "Zagreb",
+        "zupanija": "Grad Zagreb",
+        "drzava": "Republika Hrvatska",
+        "brojzvjezdica": 5,
+        "ratings": {
+            "googlerating": 4.5,
+            "bookingrating": 8.7,
+            "trivagorating": 8.2
+        },
+        "weburl": "https://www.admiralhotel.hr/",
+        "telefon": "013322901",
+        "email": "info@admiralhotel.hr"
+    },
+    {
+        "naziv": "Sheraton",
         "adresa": "Ulica kneza Borne 2",
         "grad": "Zagreb",
         "zupanija": "Grad Zagreb",
@@ -270,5 +270,37 @@
         "weburl": null,
         "telefon": "014553535",
         "email": null
+    },
+    {
+        "naziv": "Hotel Park 45",
+        "adresa": "Ilica 45",
+        "grad": "Zagreb",
+        "zupanija": "Grad Zagreb",
+        "drzava": "Republika Hrvatska",
+        "brojzvjezdica": 4,
+        "ratings": {
+            "googlerating": 4.6,
+            "bookingrating": 9.3,
+            "trivagorating": 9.1
+        },
+        "weburl": "https://www.hotelpark45.hr/",
+        "telefon": "014095999",
+        "email": "info@hotelpark45.hr"
+    },
+    {
+        "naziv": "Hotel President",
+        "adresa": "Pantovčak 52",
+        "grad": "Zagreb",
+        "zupanija": "Grad Zagreb",
+        "drzava": "Republika Hrvatska",
+        "brojzvjezdica": 4,
+        "ratings": {
+            "googlerating": 4.5,
+            "bookingrating": 8.7,
+            "trivagorating": 8.6
+        },
+        "weburl": "http://www.president-zagreb.com/",
+        "telefon": "014881480",
+        "email": "hotel@president-zagreb.com"
     }
 ]
