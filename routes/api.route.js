@@ -294,18 +294,35 @@ apiRouter.post('/', async (req, res) => {
             'Content-type': 'application/json'
         });
     }
-    response = JSON.parse(response)
+    response = JSON.parse(response);
     res.status(200).send(response);
 });
 
 //e) /api/hoteli/:id
 apiRouter.put('/:id', async (req, res) => {
     const id = req.params.id;
-    
+    console.log(2);
     idChecker(id, req.method, res)
 
     const body = req.body;
     const original = (await pool.query(format(`%s WHERE hotelid=%s`, displaySelect, id))).rows[0];
+
+    if (body.grad !== original.grad || body.zupanija !== original.zupanija || body.drzava !== body.drzava) {
+        var response = format(`{
+            "status": "400 Bad Request",
+            "message": "Cannot change naziv grada, zupanije or drzave",
+            "response": [%s]
+        }`, original);
+        res.set({
+            'method' : 'PUT',
+            'status' : '400 Bad Request',
+            'message' : 'Cannot change naziv grada, zupanije or drzave',
+            'Content-type': 'application/json'
+        });
+        response = JSON.parse(response);
+        res.status(400).send(response);
+    }
+
     if (body.naziv !== original.naziv) {
         var sqlic = format(`UPDATE hotel SET naziv = '%s' WHERE hotelid=%s`, body.naziv, id);
         await pool.query(sqlic);
@@ -336,12 +353,6 @@ apiRouter.put('/:id', async (req, res) => {
             await pool.query(format(`INSERT INTO ulice (nazivulice, gradid) VALUES
                     ('%s', (SELECT gradid FROM ulice WHERE nazivulice like '%s'))`, ulica, ulicaoriginal));
         }
-    }
-    if (body.grad !== original.grad) {
-    }
-    if (body.zupanija !== original.zupanija) {
-    }
-    if (body.drzava !== body.drzava) {
     }
 
     if (body.brojzvjezdica !== original.brojzvjezdica) {
