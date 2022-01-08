@@ -46,7 +46,18 @@ apiRouter.get('/openapi', async (req, res) => {
         let response = format(`{
             "status": "200 OK",
             "message": "Successfully fetched the OpenAPI specification",
-            "response": [%s]
+            "response": [
+                "@context": {
+                    "@vocab": "https://schema.org/",
+                    "naziv": "name",
+                    "adresa": "streetAddress",
+                    "grad": "https://schema.org/City",
+                    "brojzvjezdica": "starRating",
+                    "weburl": "url",
+                    "telefon": "telephone",
+                    "email": "email"
+                },
+                %s]
         }`, data);
         res.set({
             'method' : 'GET',
@@ -63,12 +74,24 @@ apiRouter.get('/openapi', async (req, res) => {
 apiRouter.get('/', async (req, res) => {
     fs.readFile("./hoteliFiles/hoteli.json", "utf-8", function (err, data) {
         if (err) throw err;
+        
         data = JSON.parse(data);
 
         let response = format(`{
             "status": "200 OK",
             "message": "All data fetched",
-            "response": [%s]
+            "response": [
+                "@context": {
+                    "@vocab": "https://schema.org/",
+                    "naziv": "name",
+                    "adresa": "streetAddress",
+                    "grad": "https://schema.org/City",
+                    "brojzvjezdica": "starRating",
+                    "weburl": "url",
+                    "telefon": "telephone",
+                    "email": "email"
+                },
+                %s]
         }`, data);
         res.set({
             'method' : 'GET',
@@ -87,7 +110,12 @@ apiRouter.get('/gradovi', async (req, res) => {
     let response = format(`{
         "status": "200 OK",
         "message": "All gradovi fetched",
-        "response": [%s]
+        "response": [
+            "@context": {
+                "@vocab": "https://schema.org/City",
+                "nazivgrada": "name",
+            },
+            %s]
     }`, data);
     res.set({
         'method' : 'GET',
@@ -105,7 +133,12 @@ apiRouter.get('/ulice', async (req, res) => {
     let response = format(`{
         "status": "200 OK",
         "message": "All ulice fetched",
-        "response": [%s]
+        "response": [
+            "@context": {
+                "@vocab": "https://schema.org/PostalAddress",
+                "nazivulice": "streetAddress"
+            },
+            %s]
     }`, data);
     res.set({
         'method' : 'GET',
@@ -122,7 +155,12 @@ apiRouter.get('/nazivi', async (req, res) => {
     let response = format(`{
         "status": "200 OK",
         "message": "All nazivi fetched",
-        "response": [%s]
+        "response": [
+            "@context": {
+                "@vocab": "https://schema.org/Hotel",
+                "naziv": "name"
+            },
+            %s]
     }`, data);
     res.set({
         'method' : 'GET',
@@ -153,7 +191,18 @@ apiRouter.get('/:id', async (req, res) => {
         let response = format(`{
             "status": "200 OK",
             "message": "Data with id = %s fetched",
-            "response": [%s]
+            "response": [
+                "@context": {
+                    "@vocab": "https://schema.org/",
+                    "naziv": "name",
+                    "adresa": "streetAddress",
+                    "grad": "https://schema.org/City",
+                    "brojzvjezdica": "starRating",
+                    "weburl": "url",
+                    "telefon": "telephone",
+                    "email": "email"
+                },
+                %s]
         }`, id, data);
         res.set({
             'method' : 'GET',
@@ -273,7 +322,18 @@ apiRouter.post('/', async (req, res) => {
         var response = format(`{
             "status": "200 OK",
             "message": "Hotel with the provided information already exists",
-            "response": [%s]
+            "response": [
+                "@context": {
+                    "@vocab": "https://schema.org/",
+                    "naziv": "name",
+                    "adresa": "streetAddress",
+                    "grad": "https://schema.org/City",
+                    "brojzvjezdica": "starRating",
+                    "weburl": "url",
+                    "telefon": "telephone",
+                    "email": "email"
+                },
+                %s]
         }`, data);
         res.set({
             'method' : 'POST',
@@ -285,7 +345,18 @@ apiRouter.post('/', async (req, res) => {
         var response = format(`{
             "status": "201 Created",
             "message": "The request succeeded, and a new resource was created as a result",
-            "response": [%s]
+            "response": [
+                "@context": {
+                    "@vocab": "https://schema.org/",
+                    "naziv": "name",
+                    "adresa": "streetAddress",
+                    "grad": "https://schema.org/City",
+                    "brojzvjezdica": "starRating",
+                    "weburl": "url",
+                    "telefon": "telephone",
+                    "email": "email"
+                },
+                %s]
         }`, data);
         res.set({
             'method' : 'POST',
@@ -393,7 +464,18 @@ apiRouter.put('/:id', async (req, res) => {
     var response = format(`{
         "status": "200 OK",
         "message": "The request succeeded",
-        "response": [%s]
+        "response": [
+            "@context": {
+                "@vocab": "https://schema.org/",
+                "naziv": "name",
+                "adresa": "streetAddress",
+                "grad": "https://schema.org/City",
+                "brojzvjezdica": "starRating",
+                "weburl": "url",
+                "telefon": "telephone",
+                "email": "email"
+            },
+            %s]
     }`, body);
     response = JSON.parse(response);
     res.status(200).send(response);
