@@ -36,6 +36,27 @@ div {
     padding-right: 3rem;
 }
 
+nav {
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+}
+
+ul {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    padding: 10px 10px 20px 0;
+}
+
+li span {
+    font-family: var(--font-primary);
+}
+
 .podaci {
     margin: 10px 0 50px 0;
 }
@@ -100,7 +121,7 @@ p {
 
 i {
     padding-left: 15px;
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
 
 a {

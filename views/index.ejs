@@ -10,9 +10,8 @@
     <meta name="description" content="Skup podataka hotela">
     <meta name="keywords" content="hoteli, skup podataka, otvoreni skup podataka, hostel, trivago, booking">
     <meta name="author" content="st52371">
+    <link rel="stylesheet" href="/styles/fontawesome-free-5.15.4-web/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="../styles/index.css">
-    <!-- <link rel="shortcut icon" type="image/png" href="../images/favicon.png"> -->
-    <!-- <script src="https://kit.fontawesome.com/ff7f7f1500.js" crossorigin="anonymous"></script> -->
     
     <title>Hoteli</title>
 </head>
@@ -22,48 +21,59 @@
         <hr>
         <br>
         <div class="podaci">
-            <a href="/" class="btn btn-primary"><span class="sp">Pregled skupa podataka -></span></a>
+            <nav>
+                <a href="/" class="btn btn-primary"><span class="sp">Pregled skupa podataka -></span></a>
+                <ul>
+                    <% if(isAuthenticated) {%> 
+                    <li><a href="/user" class="btn btn-primary"><span>Korisnički profil</span></a></li>
+                    <li><a href="../hoteli.zip" download="hoteli" class="btn btn-primary"><span>Osvježi preslike</span></a></li>
+                    <li><a href="/logout" class="btn btn-primary"><span>Logout</span></a></li>
+                <% } else { %>
+                    <li><a href="/login" class="btn btn-primary"><span>Login</span></a></li>
+                <% } %> 
+                </ul>
+            </nav>
         </div>
         <div class="licence">
             <h3>Licencija</h3>
-            <i class="far fa-circle"></i>
+            <!-- <i class="far fa-circle"></i> -->
             <span>MIT License</span>
         </div>
         <div class="author">
             <h3>Autor</h3>
-            <i class="far fa-circle"></i>
+            <!-- <i class="far fa-circle"></i> -->
             <span>st52371</span>
         </div>
         <div class="author">
             <h3>Trenutna verzija skupa podataka</h3>
-            <i class="far fa-circle"></i>
+            <!-- <i class="far fa-circle"></i> -->
             <span>1.0</span>
         </div>
         <div class="author">
             <h3>Datum objave podataka</h3>
-            <i class="far fa-circle"></i>
+            <!-- <i class="far fa-circle"></i> -->
             <span>02.11.2021.</span>
         </div>
         <div class="author">
             <h3>Datum posljednjeg ažuriranja podataka</h3>
-            <i class="far fa-circle"></i>
+            <!-- <i class="far fa-circle"></i> -->
             <span>02.11.2021.</span>
         </div>
         <div class="author">
             <h3>Jezik u kojem su podaci zapisani</h3>
-            <i class="far fa-circle"></i>
+            <!-- <i class="far fa-circle"></i> -->
             <span>hrvatski</span>
         </div>
         <div class="formats">
             <h3>Ponuđeni formati podataka</h3>
-            <i class="far fa-circle"></i>
-            <a href="../hoteli.json" download="hoteli"><span>JSON</span></a>
-            <i class="far fa-circle"></i>
-            <a href="../hoteli.csv" download="hoteli"><span>CSV</span></a>
+            <!-- <i class="far fa-circle"></i> -->
+            <a href="../hoteliFiles/hoteli.json" download="hoteli"><span>JSON</span></a>
+            <!-- <i class="far fa-circle"></i> -->
+            <a href="../hoteliFiles/hoteli.csv" download="hoteli"><span>CSV</span></a>
         </div>
         <div class="author">
             <h3>Encoding</h3>
-            <i class="far fa-circle"></i>
+            <!-- <i class="far fa-circle"></i> -->
             <span>UTF-8</span>
         </div>
         <div class="atributi">

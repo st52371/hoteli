@@ -35,6 +35,32 @@ div {
     padding-right: 3rem;
     padding: 5px;
 }
+
+.povratak  {
+    padding: 10px 0 20px 0;
+    /* display: flex; */
+
+}
+
+nav {
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+ul {
+    list-style-type: none;
+    font-family: var(--font-primary);
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    padding: 10px 10px 20px 0;
+}
+
 option {
     font-family: var(--font-primary);
     color: var(--font-clr-primary-1);
@@ -44,9 +70,7 @@ input {
     border-radius: 12px;
     font-size: 1.2rem;
 }
-.povratak  {
-    padding: 10px 0 20px 0;
-}
+
 /* ZAS NE RADIIIIIIS */
 input:focus {
     outline: none !important;
@@ -64,7 +88,9 @@ input:focus {
     border: 1px solid var(--border-clr-primary-1);
     border-radius: 12px;
 }
-
+button {
+    letter-spacing: 2px;
+}
 .btn.btn-primary:hover {
     border: 1px solid var(--font-clr-primary-1);
     border-radius: 12px;

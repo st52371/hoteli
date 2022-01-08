@@ -5,6 +5,20 @@ const fs = require("fs");
 const api = require('./routes/api.route');
 var format = require('pg-format');
 const pool = require('./db/pgadmin');
+const { auth } = require('express-openid-connect');
+const Zip = require("adm-zip");
+require('dotenv').config();
+
+const config = {
+    authRequired: false,
+    auth0Logout: true,
+    secret: process.env.SECRET,
+    baseURL: process.env.BASEURL,
+    clientID: process.env.CLIENTID,
+    issuerBaseURL: process.env.ISSUERBASEURL
+};
+
+app.use(auth(config));
 
 app.use("/api/hoteli", api);
 
@@ -13,7 +27,6 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname));
 // da mozemo accessat stvari iz bodya
 app.use(express.urlencoded({extended: true}));
-
 
 const downloadSelect = `SELECT hotel.naziv, ulice.nazivulice || ' ' || adrese.broj::TEXT ||
         CASE WHEN adrese.dodatnaoznaka IS NULL THEN '' ELSE adrese.dodatnaoznaka END AS adresa,
@@ -59,14 +72,36 @@ const attributes2 = [{display: 'Naziv', sql: 'hotel.naziv'},
                     ];
 // prikaz stranice s metapodacima
 app.get('/metapodaci', async (req, res) => {
-    res.render('index');
+    res.render('index', {
+        isAuthenticated: req.oidc.isAuthenticated()
+    });
+})
+
+async function createZipArchive() {
+    const zip = new Zip();
+    const outputFile = "hoteli.zip";
+    zip.addLocalFolder("./hoteliFiles");
+    zip.writeZip(outputFile);
+}
+
+app.get('/user', async (req, res) => {
+    if (!req.oidc.isAuthenticated()) {
+        res.send("Korisnik nije prijavljen").status(401);
+    } else {
+        createZipArchive();
+        res.render('userpage', {
+            isAuthenticated: req.oidc.isAuthenticated(),
+            user: req.oidc.user
+        });
+    }
 })
 // prikaz svih podataka pri ucitavanju stranice
 app.get('/', async (req, res) => {
+    console.log(req.oidc.isAuthenticated());
     // promjena original fileova u slucaju updateanja baze
     var json = format(`COPY (select json_agg(row_to_json(hoteli))
-                FROM (%s) hoteli) to 'D:/fax/or/labosi/gitty/hoteli/hoteli.json'`, downloadSelect);
-    var csv = format(`COPY (%s) TO 'D:/fax/or/labosi/gitty/hoteli/hoteli.csv'
+                FROM (%s) hoteli) to 'D:/fax/or/labosi/gitty/hoteli/hoteliFiles/hoteli.json'`, downloadSelect);
+    var csv = format(`COPY (%s) TO 'D:/fax/or/labosi/gitty/hoteli/hoteliFiles/hoteli.csv'
                 DELIMITER ',' ENCODING 'utf-8' CSV HEADER`, downloadSelect);
     await pool.query(json);
     await pool.query(csv);
@@ -75,7 +110,8 @@ app.get('/', async (req, res) => {
     res.render('datatable', {
         rows: results.rows,
         attributes: attributes,
-        attributes2: attributes2
+        attributes2: attributes2,
+        isAuthenticated: req.oidc.isAuthenticated()
     });
 });
 
@@ -218,7 +254,8 @@ app.post('/', async (req, res) => {
         text: 'world',
         rows: results.rows,
         attributes: attributes,
-        attributes2: attributes2
+        attributes2: attributes2,
+        isAuthenticated: req.oidc.isAuthenticated()
     });
 
 });

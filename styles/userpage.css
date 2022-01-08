@@ -1,0 +1,14 @@
+p span {
+    font-weight: 900;
+    font-style: italic;
+}
+
+p {
+    font-size: 1rem;
+    font-family: var(--font-secondary);
+}
+
+i {
+    padding-left: 15px;
+    font-size: 0.7rem;
+}

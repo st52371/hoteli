@@ -61,7 +61,7 @@ apiRouter.get('/openapi', async (req, res) => {
 
 //a) na /api/hoteli
 apiRouter.get('/', async (req, res) => {
-    fs.readFile("./hoteli.json", "utf-8", function (err, data) {
+    fs.readFile("./hoteliFiles/hoteli.json", "utf-8", function (err, data) {
         if (err) throw err;
         data = JSON.parse(data);
 
@@ -261,8 +261,8 @@ apiRouter.post('/', async (req, res) => {
 
     // promjena original json i csv fileova baze
     var json = format(`COPY (select json_agg(row_to_json(hoteli))
-                FROM (%s) hoteli) to 'D:/fax/or/labosi/gitty/hoteli/hoteli.json'`, downloadSelect);
-    var csv = format(`COPY (%s) TO 'D:/fax/or/labosi/gitty/hoteli/hoteli.csv'
+                FROM (%s) hoteli) to 'D:/fax/or/labosi/gitty/hoteli/hoteliFiles/hoteli.json'`, downloadSelect);
+    var csv = format(`COPY (%s) TO 'D:/fax/or/labosi/gitty/hoteli/hoteliFiles/hoteli.csv'
                 DELIMITER ',' ENCODING 'utf-8' CSV HEADER`, downloadSelect);
     await pool.query(json);
     await pool.query(csv);
@@ -384,8 +384,8 @@ apiRouter.put('/:id', async (req, res) => {
 
     // promjena original json i csv fileova baze
     var json = format(`COPY (select json_agg(row_to_json(hoteli))
-                FROM (%s) hoteli) to 'D:/fax/or/labosi/gitty/hoteli/hoteli.json'`, downloadSelect);
-    var csv = format(`COPY (%s) TO 'D:/fax/or/labosi/gitty/hoteli/hoteli.csv'
+                FROM (%s) hoteli) to 'D:/fax/or/labosi/gitty/hoteli/hoteliFiles/hoteli.json'`, downloadSelect);
+    var csv = format(`COPY (%s) TO 'D:/fax/or/labosi/gitty/hoteli/hoteliFiles/hoteli.csv'
                 DELIMITER ',' ENCODING 'utf-8' CSV HEADER`, downloadSelect);
     await pool.query(json);
     await pool.query(csv);
@@ -417,8 +417,8 @@ apiRouter.delete('/:id', async (req, res) => {
 
     // promjena original json i csv fileova baze
     var json = format(`COPY (select json_agg(row_to_json(hoteli))
-                FROM (%s) hoteli) to 'D:/fax/or/labosi/gitty/hoteli/hoteli.json'`, downloadSelect);
-    var csv = format(`COPY (%s) TO 'D:/fax/or/labosi/gitty/hoteli/hoteli.csv'
+                FROM (%s) hoteli) to 'D:/fax/or/labosi/gitty/hoteli/hoteliFiles/hoteli.json'`, downloadSelect);
+    var csv = format(`COPY (%s) TO 'D:/fax/or/labosi/gitty/hoteli/hoteliFiles/hoteli.csv'
                 DELIMITER ',' ENCODING 'utf-8' CSV HEADER`, downloadSelect);
     await pool.query(json);
     await pool.query(csv);
